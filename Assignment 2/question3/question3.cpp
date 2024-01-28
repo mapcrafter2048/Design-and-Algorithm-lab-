@@ -4,76 +4,53 @@
 
 using namespace std;
 
-// Function to merge two sorted arrays
-void merge(int arr[], int left[], int leftSize, int right[], int rightSize)
+void merge(vector<int> &arr, int start, int mid, int end)
 {
-    int i = 0, j = 0, k = 0;
+    int start2 = mid + 1;
 
-    // Merge elements from left[] and right[] into arr[]
-    while (i < leftSize && j < rightSize)
+    if (arr[mid] <= arr[start2])
     {
-        if (left[i] <= right[j])
+        return;
+    }
+
+    while (start <= mid && start2 <= end)
+    {
+        if (arr[start] <= arr[start2])
         {
-            arr[k] = left[i];
-            i++;
+            start++;
         }
         else
         {
-            arr[k] = right[j];
-            j++;
+            int value = arr[start2];
+            int index = start2;
+
+            while (index != start)
+            {
+                arr[index] = arr[index - 1];
+                index--;
+            }
+
+            arr[start] = value;
+
+            start++;
+            mid++;
+            start2++;
         }
-        k++;
-    }
-
-    // Copy remaining elements from left[], if any
-    while (i < leftSize)
-    {
-        arr[k] = left[i];
-        i++;
-        k++;
-    }
-
-    // Copy remaining elements from right[], if any
-    while (j < rightSize)
-    {
-        arr[k] = right[j];
-        j++;
-        k++;
     }
 }
 
 // Function to sort an unsorted array using the merging algorithm
-void mergeSort(int arr[], int n)
+void mergeSort(vector<int> &arr, int start, int end)
 {
-#include <iostream>
-
-    // ...
-
-    if (n <= 1)
+    if (start < end)
     {
-        return; // Base case: array is already sorted
+        int mid = start + (end - start) / 2;
+
+        mergeSort(arr, start, mid);
+        mergeSort(arr, mid + 1, end);
+
+        merge(arr, start, mid, end);
     }
-
-    int mid = n / 2;
-    int *left = new int[mid];
-    int *right = new int[n - mid];
-
-    // Divide the array into two halves
-    for (int i = 0; i < mid; i++)
-    {
-        left[i] = arr[i];
-    }
-    for (int i = mid; i < n; i++)
-    {
-        right[i - mid] = arr[i];
-    }
-
-    // Recursively sort the two halves
-    mergeSort(left, mid);
-    mergeSort(right, n - mid);
-
-    // Merge the sorted halves
-    merge(arr, left, mid, right, n - mid);
 }
 
 int main()
@@ -108,8 +85,9 @@ int main()
 
     inputFile.close();
 
-    // Sort the array using merge sort
-    mergeSort(arr, size);
+    vector<int> arrVec(arr, arr + size);
+
+    mergeSort(arrVec, 0, arrVec.size() - 1);
 
     // Write to output.txt
     ofstream outputFile("output.txt");
