@@ -32,11 +32,11 @@ int findKthLargest(vector<int> &nums, int k)
         {
             return nums[pivotIndex];
         }
-        else if (pivotIndex < targetIndex)
+        else if (pivotIndex < targetIndex) // target index in the right part
         {
             low = pivotIndex + 1;
         }
-        else
+        else // target index in the left part of the function array
         {
             high = pivotIndex - 1;
         }
