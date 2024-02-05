@@ -65,7 +65,7 @@ int countInversions(vector<int> &arr)
 
 int main()
 {
-    vector<int> arr = {3, 2, 1};
+    vector<int> arr = {1, 9, 1, 4, 5, 8};
 
     int invCount = countInversions(arr);
 
