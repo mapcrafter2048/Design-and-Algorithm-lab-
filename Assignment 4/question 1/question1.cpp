@@ -18,7 +18,7 @@ int merge(vector<int> &arr, vector<int> &temp, int left, int mid, int right)
         else
         {
             temp[k++] = arr[j++];
-            invCount += (mid - i); // increase the incount by the number of remaining elements in the left subarray (mid - i), as these form inversions with the right element.Since the array is being split and sorted, if arr[i] is greater than arr[j], then arr[i] is also greater than all the elements from arr[i+1] to arr[mid].
+            invCount += (mid - i);
         }
     }
 

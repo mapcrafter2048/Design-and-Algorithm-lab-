@@ -60,21 +60,19 @@ int main()
     vector<long long int> arr1 = {1, 3, 5};
     vector<long long int> arr2 = {2, 4, 6};
     int result1 = medianOfSortedArray(arr1, arr2);
-    cout << "Median: " << result1 << endl; // Output should be 3
+    cout << "Median: " << result1 << endl;
 
     // Example 2
     vector<long long int> arr3 = {10, 20, 30, 40, 50};
     vector<long long int> arr4 = {5, 15, 25, 35, 45};
     int result2 = medianOfSortedArray(arr3, arr4);
-    cout << "Median: " << result2 << endl; // Output should be 25
+    cout << "Median: " << result2 << endl;
 
     // Example 3
     vector<long long int> arr5 = {1, 2, 3};
     vector<long long int> arr6 = {4, 5, 6, 7, 8};
     int result3 = medianOfSortedArray(arr5, arr6);
-    cout << "Median: " << result3 << endl; // Output should be 4
-
-    // Add more examples as needed
+    cout << "Median: " << result3 << endl;
 
     return 0;
 }
