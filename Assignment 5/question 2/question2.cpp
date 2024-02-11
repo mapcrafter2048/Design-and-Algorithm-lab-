@@ -4,40 +4,70 @@
 
 using namespace std;
 
-int minThrows(vector<vector<int>> &board)
+int minDiceThrows(vector<int> &board, int N)
 {
-    int n = board.size();
-    vector<bool> visited(n, false);
     queue<pair<int, int>> q;
-    q.push({0, 0}); // Starting cell with distance 0
-    visited[0] = true;
+    vector<bool> visited(N + 1, false);
+
+    q.push({1, 0});
+    visited[1] = true;
 
     while (!q.empty())
     {
-        pair<int, int> curr = q.front();
+        int cell = q.front().first;
+        int distance = q.front().second;
         q.pop();
-        int cell = curr.first;
-        int dist = curr.second;
 
-        if (cell == n - 1)
+        if (cell == N)
         {
-            return dist; // Reached the last cell
+            return distance;
         }
 
-        for (int i = cell + 1; i <= cell + 6 && i < n; i++)
+        for (int i = 1; i <= 6; i++)
         {
-            if (!visited[i])
+            int nextCell = cell + i;
+
+            if (nextCell <= N && !visited[nextCell])
             {
-                visited[i] = true;
-                int nextCell = (board[i / 10][i % 10] == -1) ? i : board[i / 10][i % 10];
-                q.push({nextCell, dist + 1});
+                visited[nextCell] = true;
+
+                if (board[nextCell] != -1)
+                {
+                    nextCell = board[nextCell];
+                }
+
+                q.push({nextCell, distance + 1});
             }
         }
     }
 
-    return -1; // No path found
+    return -1;
 }
 
 int main()
 {
+    int N = 30;
+
+    vector<int> board(N + 1, -1);
+
+    board[3] = 22;
+    board[5] = 8;
+    board[11] = 26;
+    board[20] = 29;
+    board[17] = 4;
+    board[19] = 7;
+    board[27] = 1;
+
+    int minThrows = minDiceThrows(board, N);
+
+    if (minThrows != -1)
+    {
+        cout << "Minimum number of dice throws required: " << minThrows << endl;
+    }
+    else
+    {
+        cout << "Destination cell is not reachable." << endl;
+    }
+
+    return 0;
 }
