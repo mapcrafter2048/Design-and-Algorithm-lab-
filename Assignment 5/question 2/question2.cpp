@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int minThrows(vector<int> &board)
+int minThrows(vector<vector<int>> &board)
 {
     int n = board.size();
     vector<bool> visited(n, false);
@@ -29,7 +29,7 @@ int minThrows(vector<int> &board)
             if (!visited[i])
             {
                 visited[i] = true;
-                int nextCell = (board[i] == -1) ? i : board[i];
+                int nextCell = (board[i / 10][i % 10] == -1) ? i : board[i / 10][i % 10];
                 q.push({nextCell, dist + 1});
             }
         }
@@ -40,44 +40,4 @@ int minThrows(vector<int> &board)
 
 int main()
 {
-    // Snake and ladder board representation
-    vector<int> board = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
-
-    // Ladders
-    board[1] = 38;
-    board[4] = 14;
-    board[9] = 31;
-    board[21] = 42;
-    board[28] = 84;
-    board[36] = 44;
-    board[51] = 67;
-    board[71] = 91;
-    board[80] = 100;
-
-    // Snakes
-    board[16] = 6;
-    board[47] = 26;
-    board[49] = 11;
-    board[56] = 53;
-    board[62] = 19;
-    board[64] = 60;
-    board[87] = 24;
-    board[93] = 73;
-    board[95] = 75;
-    board[98] = 78;
-
-    int minThrowsRequired = minThrows(board);
-    cout << "Minimum number of throws required: " << minThrowsRequired << endl;
-
-    return 0;
 }
