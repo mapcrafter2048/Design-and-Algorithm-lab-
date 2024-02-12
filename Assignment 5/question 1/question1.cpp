@@ -3,17 +3,17 @@
 
 using namespace std;
 
-int dfs(vector<vector<int>> &matrix, int row, int col)
+int dfs(vector<vector<int>> &matrix, int row, int col, int value)
 {
     int rows = matrix.size();
     int cols = matrix[0].size();
 
-    if (row < 0 || row >= rows || col < 0 || col >= cols || matrix[row][col] != 1)
+    if (row < 0 || row >= rows || col < 0 || col >= cols || matrix[row][col] != value)
     {
         return 0;
     }
 
-    matrix[row][col] = 0; // Mark the cell as visited
+    matrix[row][col] = -1; // Mark the cell as visited
 
     int size = 1; // Initialize the size of the region
 
@@ -22,7 +22,10 @@ int dfs(vector<vector<int>> &matrix, int row, int col)
     {
         for (int j = -1; j <= 1; j++)
         {
-            size += dfs(matrix, row + i, col + j);
+            if (i != 0 || j != 0) // Exclude the current cell
+            {
+                size += dfs(matrix, row + i, col + j, value);
+            }
         }
     }
 
@@ -41,9 +44,9 @@ int largestRegionSize(vector<vector<int>> &matrix)
     {
         for (int j = 0; j < cols; j++)
         {
-            if (matrix[i][j] == 1)
+            if (matrix[i][j] == 0 || matrix[i][j] == 1)
             {
-                int regionSize = dfs(matrix, i, j);
+                int regionSize = dfs(matrix, i, j, matrix[i][j]);
                 largestSize = max(largestSize, regionSize);
             }
         }
