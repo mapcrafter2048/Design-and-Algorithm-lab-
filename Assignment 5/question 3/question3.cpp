@@ -52,20 +52,11 @@ bool canDivideIntoCliques(vector<vector<int>> &graph)
 
 int main()
 {
-    int V;
-    cout << "Enter the number of vertices: ";
-    cin >> V;
-
-    vector<vector<int>> graph(V, vector<int>(V, 0));
-
-    cout << "Enter the adjacency matrix:\n";
-    for (int i = 0; i < V; i++)
-    {
-        for (int j = 0; j < V; j++)
-        {
-            cin >> graph[i][j];
-        }
-    }
+    vector<vector<int>> graph = {
+        {0, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 0, 0, 0},
+        {0, 1, 0, 0}};
 
     if (canDivideIntoCliques(graph))
         cout << "The graph can be divided into two cliques.";
