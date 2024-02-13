@@ -51,8 +51,8 @@ int main()
     vector<int> board(N + 1, -1);
 
     board[3] = 22;
-    board[5] = 8;
-    board[11] = 26;
+    board[5] = 30;
+    board[1] = 26;
     board[20] = 29;
     board[17] = 4;
     board[19] = 7;
