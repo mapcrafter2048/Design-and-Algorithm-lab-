@@ -1,109 +1,136 @@
 #include <iostream>
+#include <queue>
 #include <vector>
+#include <set>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
 #include <stack>
+#include <cmath>
+
 using namespace std;
 
-vector<vector<int>> adj;        // Adjacency list representation of the graph
-vector<int> low, disc;          // Arrays to store discovery time and low value of each vertex
-vector<bool> visited;           // Array to track visited vertices
-vector<bool> isArticulation;    // Array to track articulation points
-vector<pair<int, int>> bridges; // Vector to store bridges
-
-int time = 0; // Global variable to track discovery time
-
-void dfs(int u, int parent)
+class Solution
 {
-    int currentTime = 0; // Declare and initialize currentTime
-    visited[u] = true;
-    disc[u] = low[u] = ++currentTime;
-    int children = 0;
-
-    for (int v : adj[u])
+public:
+    int timer = 1;
+    void dfs(int currentNode, int parentNode, vector<int> &visited, vector<int> adj[], vector<int> &tin, vector<int> &low, vector<vector<int>> &bridges, vector<int> &isArticulation)
     {
-        if (!visited[v])
+        visited[currentNode] = 1;
+        tin[currentNode] = low[currentNode] = timer++;
+        int childCount = 0;
+        for (auto neighbor : adj[currentNode])
         {
-            children++;
-            dfs(v, u);
-            low[u] = min(low[u], low[v]);
-
-            // Check if u is an articulation point
-            if (parent != -1 && low[v] >= disc[u])
+            if (neighbor == parentNode)
+                continue;
+            if (visited[neighbor] == 0)
             {
-                isArticulation[u] = true;
-            }
+                dfs(neighbor, currentNode, visited, adj, tin, low, bridges, isArticulation);
+                low[currentNode] = min(low[neighbor], low[currentNode]);
+                if (low[neighbor] > tin[currentNode])
+                {
+                    bridges.push_back({neighbor, currentNode});
+                }
 
-            // Check if (u, v) is a bridge
-            if (low[v] > disc[u])
+                if (parentNode != -1 && low[neighbor] >= tin[currentNode])
+                {
+                    isArticulation[currentNode] = true;
+                }
+                childCount++;
+            }
+            else
             {
-                bridges.push_back({u, v});
+                low[currentNode] = min(low[currentNode], low[neighbor]);
+            }
+            if (parentNode == -1 && childCount > 1)
+            {
+                isArticulation[currentNode] = true;
             }
         }
-        else if (v != parent)
+    }
+
+    vector<vector<int>> findBridges(int numNodes, vector<vector<int>> &connections)
+    {
+        vector<int> adj[numNodes];
+        for (auto connection : connections)
         {
-            low[u] = min(low[u], disc[v]);
+            int u = connection[0], v = connection[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
         }
+        vector<int> visited(numNodes, 0);
+        vector<int> tin(numNodes);
+        vector<int> low(numNodes);
+        vector<vector<int>> bridges;
+        vector<int> isArticulation(numNodes, false);
+        dfs(0, -1, visited, adj, tin, low, bridges, isArticulation);
+        return bridges;
     }
 
-    // Check if u is the root and has more than one child
-    if (parent == -1 && children > 1)
+    vector<int> findArticulationPoints(int numNodes, vector<vector<int>> &connections)
     {
-        isArticulation[u] = true;
-    }
-}
+        vector<int> adj[numNodes];
 
-void findArticulationPointsAndBridges(int n)
-{
-    low.resize(n);
-    disc.resize(n);
-    visited.resize(n);
-    isArticulation.resize(n);
-
-    for (int i = 0; i < n; i++)
-    {
-        if (!visited[i])
+        for (auto connection : connections)
         {
-            dfs(i, -1);
+            int u = connection[0], v = connection[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
         }
-    }
 
-    cout << "Articulation points: ";
-    for (int i = 0; i < n; i++)
-    {
-        if (isArticulation[i])
+        vector<int> visited(numNodes, 0);
+        vector<int> tin(numNodes);
+        vector<int> low(numNodes);
+        vector<vector<int>> bridges;
+        vector<int> isArticulation(numNodes, false);
+
+        for (int i = 0; i < numNodes; i++)
         {
-            cout << i << " ";
+            if (!visited[i])
+            {
+                dfs(i, -1, visited, adj, tin, low, bridges, isArticulation);
+            }
         }
-    }
-    cout << endl;
 
-    cout << "Bridges: ";
-    for (auto bridge : bridges)
-    {
-        cout << "(" << bridge.first << ", " << bridge.second << ") ";
+        vector<int> articulationPoints;
+        for (int i = 0; i < numNodes; i++)
+        {
+            if (isArticulation[i])
+            {
+                articulationPoints.push_back(i);
+            }
+        }
+
+        return articulationPoints;
     }
-    cout << endl;
-}
+};
 
 int main()
 {
-    int n, m;
-    cout << "Enter the number of vertices: ";
-    cin >> n;
-    cout << "Enter the number of edges: ";
-    cin >> m;
 
-    adj.resize(n);
+    int numNodes = 4;
+    vector<vector<int>> connections = {
+        {0, 1}, {1, 2}, {2, 0}, {1, 3}};
 
-    cout << "Enter the edges: " << endl;
-    for (int i = 0; i < m; i++)
+    Solution obj;
+    vector<vector<int>> bridges = obj.findBridges(numNodes, connections);
+    for (auto bridge : bridges)
     {
-        int u, v;
-        cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        cout << "[" << bridge[0] << ", " << bridge[1] << "] " << endl;
     }
+    int numNodes1 = 5;
+    vector<vector<int>> edges = {
+        {0, 1}, {1, 4}, {2, 4}, {2, 3}, {3, 4}};
 
-    findArticulationPointsAndBridges(n);
+    Solution obj1;
+    vector<int> articulationPoints = obj1.findArticulationPoints(numNodes1, edges);
 
+    // Print articulation points
+    cout << "Articulation Points: ";
+    for (int node : articulationPoints)
+    {
+        cout << node << " ";
+    }
+    cout << endl;
     return 0;
 }

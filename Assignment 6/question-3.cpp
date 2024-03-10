@@ -1,118 +1,93 @@
+// O(V+E) + O(V+E) + O(V+E) ~ O(V+E) , where V = no. of vertices, E = no. of edges. The first step is a simple DFS, so the first term is O(V+E). The second step of reversing the graph and the third step, containing DFS again, will take O(V+E) each.
+
 #include <iostream>
 #include <vector>
 #include <stack>
 #include <algorithm>
 using namespace std;
 
-class Graph
+class Solution
 {
-    int V;
-    vector<int> *adj;
-    void SCCUtil(int u, vector<int> &disc, vector<int> &low, stack<int> &st, vector<bool> &stackMember, vector<vector<int>> &result);
+private:
+    void DFS(int node, vector<int> &visited, vector<int> adj[],
+             stack<int> &st)
+    {
+        visited[node] = 1;
+        for (auto neighbor : adj[node])
+        {
+            if (!visited[neighbor])
+            {
+                DFS(neighbor, visited, adj, st);
+            }
+        }
+
+        st.push(node);
+    }
+
+private:
+    void DFS2(int node, vector<int> &visited, vector<int> adjT[])
+    {
+        visited[node] = 1;
+        for (auto neighbor : adjT[node])
+        {
+            if (!visited[neighbor])
+            {
+                DFS2(neighbor, visited, adjT);
+            }
+        }
+    }
 
 public:
-    Graph(int V);
-    void addEdge(int u, int v);
-    vector<vector<int>> findSCC();
-};
-
-Graph::Graph(int V)
-{
-    this->V = V;
-    adj = new vector<int>[V];
-}
-
-void Graph::addEdge(int u, int v)
-{
-    adj[u].push_back(v);
-}
-
-void Graph::SCCUtil(int u, vector<int> &disc, vector<int> &low, stack<int> &st, vector<bool> &stackMember, vector<vector<int>> &result)
-{
-    static int time = 0;
-    disc[u] = low[u] = ++time;
-    st.push(u);
-    stackMember[u] = true;
-
-    for (int v : adj[u])
+    // Function to find number of strongly connected components in the graph.
+    int kosaraju(int numVertices, vector<int> adj[])
     {
-        if (disc[v] == -1)
+        vector<int> visited(numVertices, 0);
+        stack<int> st;
+        for (int i = 0; i < numVertices; i++)
         {
-            SCCUtil(v, disc, low, st, stackMember, result);
-            low[u] = min(low[u], low[v]);
+            if (!visited[i])
+            {
+                DFS(i, visited, adj, st);
+            }
         }
-        else if (stackMember[v])
-        {
-            low[u] = min(low[u], disc[v]);
-        }
-    }
 
-    if (low[u] == disc[u])
-    {
-        vector<int> component;
-        while (st.top() != u)
+        vector<int> adjT[numVertices];
+        for (int i = 0; i < numVertices; i++)
         {
-            int v = st.top();
+            visited[i] = 0;
+            for (auto neighbor : adj[i])
+            {
+                adjT[neighbor].push_back(i);
+            }
+        }
+        int scc = 0;
+        while (!st.empty())
+        {
+            int node = st.top();
             st.pop();
-            stackMember[v] = false;
-            component.push_back(v);
+            if (!visited[node])
+            {
+                scc++;
+                DFS2(node, visited, adjT);
+            }
         }
-        int v = st.top();
-        st.pop();
-        stackMember[v] = false;
-        component.push_back(v);
-        result.push_back(component);
+        return scc;
     }
-}
-
-vector<vector<int>> Graph::findSCC()
-{
-    vector<int> disc(V, -1);
-    vector<int> low(V, -1);
-    vector<bool> stackMember(V, false);
-    stack<int> st;
-    vector<vector<int>> result;
-
-    for (int i = 0; i < V; i++)
-    {
-        if (disc[i] == -1)
-        {
-            SCCUtil(i, disc, low, st, stackMember, result);
-        }
-    }
-
-    return result;
-}
+};
 
 int main()
 {
-    int V, E;
-    cout << "Enter the number of vertices: ";
-    cin >> V;
-    cout << "Enter the number of edges: ";
-    cin >> E;
 
-    Graph g(V);
-
-    cout << "Enter the edges (source and destination):" << endl;
-    for (int i = 0; i < E; i++)
+    int numVertices = 5;
+    int edges[5][2] = {
+        {1, 0}, {0, 2}, {2, 1}, {0, 3}, {3, 4}};
+    vector<int> adj[numVertices];
+    for (int i = 0; i < numVertices; i++)
     {
-        int u, v;
-        cin >> u >> v;
-        g.addEdge(u, v);
+        adj[edges[i][0]].push_back(edges[i][1]);
     }
-
-    vector<vector<int>> SCCs = g.findSCC();
-
-    cout << "Strongly Connected Components:" << endl;
-    for (const auto &component : SCCs)
-    {
-        for (int v : component)
-        {
-            cout << v << " ";
-        }
-        cout << endl;
-    }
-
+    Solution obj;
+    int ans = obj.kosaraju(numVertices, adj);
+    cout << "The number of strongly connected components is: " << ans << endl;
     return 0;
 }
