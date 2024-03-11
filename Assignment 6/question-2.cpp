@@ -1,13 +1,19 @@
 #include <iostream>
+#include <queue>
 #include <vector>
+#include <set>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
 #include <stack>
+#include <cmath>
+#include <climits>
 #include <algorithm>
 
 using namespace std;
 
 void dfs(int node, vector<int> &visited, vector<vector<int>> &adjList, stack<int> &stk)
 {
-    vector<int> distances(adjList.size(), -INFINITY);
     visited[node] = 1;
     for (int neighbor : adjList[node])
     {
@@ -15,7 +21,6 @@ void dfs(int node, vector<int> &visited, vector<vector<int>> &adjList, stack<int
         {
             dfs(neighbor, visited, adjList, stk);
         }
-        distances[neighbor] = max(distances[neighbor], distances[node] + 1);
     }
     stk.push(node);
 }
@@ -36,72 +41,45 @@ vector<int> topologicalSort(int numNodes, vector<vector<int>> &adjList)
     vector<int> result;
     while (!stk.empty())
     {
-        int node = stk.top();
+        result.push_back(stk.top());
         stk.pop();
     }
 
     return result;
 }
 
-pair<vector<int>, vector<int>> longestPath(int numNodes, vector<vector<int>> &adjList, int source)
+int longestPath(int numNodes, vector<vector<int>> &adjList, int startNode)
 {
     vector<int> topoOrder = topologicalSort(numNodes, adjList);
-    vector<int> distances(numNodes, -INFINITY);
-    distances[source] = 0;
-    vector<int> parent(numNodes, -1); // Track the parent of each node
+    vector<int> distances(numNodes, INT_MIN);
+    distances[startNode] = 0;
 
     for (int node : topoOrder)
     {
         for (int neighbor : adjList[node])
         {
-            if (distances[neighbor] < distances[node] + 1)
-            {
-                distances[neighbor] = distances[node] + 1;
-                parent[neighbor] = node;
-            }
+            distances[neighbor] = max(distances[neighbor], distances[node] + 1);
         }
     }
 
     int longestDistance = *max_element(distances.begin(), distances.end());
-    int endNode = find(distances.begin(), distances.end(), longestDistance) - distances.begin();
-
-    vector<int> path;
-    while (endNode != -1)
-    {
-        path.push_back(endNode);
-        endNode = parent[endNode];
-    }
-    reverse(path.begin(), path.end());
-
-    return {distances, path};
+    return longestDistance;
 }
 
 int main()
 {
-    int numNodes, numEdges;
-    cout << "Enter the number of nodes: ";
-    cin >> numNodes;
-    cout << "Enter the number of edges: ";
-    cin >> numEdges;
-
+    int numNodes = 6;
     vector<vector<int>> adjList(numNodes);
 
-    cout << "Enter the edges:\n";
-    for (int i = 0; i < numEdges; i++)
-    {
-        int u, v;
-        cin >> u >> v;
-        adjList[u].push_back(v);
-    }
+    adjList[0] = {1, 2};
+    adjList[1] = {3};
+    adjList[2] = {3, 4};
+    adjList[3] = {5};
+    adjList[4] = {5};
 
-    vector<int> sortedNodes = topologicalSort(numNodes, adjList);
-
-    cout << "Topological Sort: ";
-    for (int node : sortedNodes)
-    {
-        cout << node << " ";
-    }
-    cout << endl;
+    int startNode = 0;
+    int longestDist = longestPath(numNodes, adjList, startNode);
+    cout << "Longest path distance: " << longestDist << endl;
 
     return 0;
 }
