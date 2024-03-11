@@ -12,6 +12,11 @@
 
 using namespace std;
 
+/// @brief Depth First Search (DFS) function to traverse the graph and fill the stack with nodes in topological order.
+/// @param node
+/// @param visited
+/// @param adjList
+/// @param stk
 void dfs(int node, vector<int> &visited, vector<vector<int>> &adjList, stack<int> &stk)
 {
     visited[node] = 1;
@@ -25,6 +30,10 @@ void dfs(int node, vector<int> &visited, vector<vector<int>> &adjList, stack<int
     stk.push(node);
 }
 
+/// @brief topologicalSort function to find the topological order of the graph.
+/// @param numNodes
+/// @param adjList
+/// @return
 vector<int> topologicalSort(int numNodes, vector<vector<int>> &adjList)
 {
     vector<int> visited(numNodes, 0);
@@ -48,6 +57,11 @@ vector<int> topologicalSort(int numNodes, vector<vector<int>> &adjList)
     return result;
 }
 
+/// @brief find the longest path in the graph. The basic idea is to find the topological order of the graph and then traverse the graph to find the longest path. we will keep track of the longest path from the start node to each node and then return the maximum of all the distances.
+/// @param numNodes
+/// @param adjList
+/// @param startNode
+/// @return
 int longestPath(int numNodes, vector<vector<int>> &adjList, int startNode)
 {
     vector<int> topoOrder = topologicalSort(numNodes, adjList);

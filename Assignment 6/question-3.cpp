@@ -8,7 +8,7 @@ using namespace std;
 
 class Solution
 {
-private:
+public:
     void DFS(int node, vector<int> &visited, vector<int> adj[],
              stack<int> &st)
     {
@@ -24,7 +24,6 @@ private:
         st.push(node);
     }
 
-private:
     void DFS2(int node, vector<int> &visited, vector<int> adjT[])
     {
         visited[node] = 1;
@@ -37,7 +36,6 @@ private:
         }
     }
 
-public:
     // Function to find number of strongly connected components in the graph.
     int kosaraju(int numVertices, vector<int> adj[])
     {

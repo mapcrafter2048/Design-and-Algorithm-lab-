@@ -44,26 +44,26 @@ bool hasCycle(vector<vector<int>> &graph, int numNodes)
 
 int main()
 {
-    int numNodes, numEdges;
-    cout << "Enter the number of nodes: ";
-    cin >> numNodes;
-    cout << "Enter the number of edges: ";
-    cin >> numEdges;
-
+    int numNodes = 5;
     vector<vector<int>> graph(numNodes);
 
-    cout << "Enter the edges (source and destination):" << endl;
-    for (int i = 0; i < numEdges; i++)
-    {
-        int src, dest;
-        cin >> src >> dest;
-        graph[src].push_back(dest);
-    }
+    // Add edges to the graph
+    graph[0].push_back(1);
+    graph[1].push_back(2);
+    graph[2].push_back(0);
+    graph[2].push_back(3);
+    graph[3].push_back(4);
+    graph[4].push_back(2);
 
+    // Call your hasCycle function to test for cycles
     if (hasCycle(graph, numNodes))
+    {
         cout << "The graph contains a cycle." << endl;
+    }
     else
+    {
         cout << "The graph does not contain a cycle." << endl;
+    }
 
     return 0;
 }
