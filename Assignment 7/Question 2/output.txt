@@ -1,100 +1,100 @@
 57
 a b 
-187
-c b f h e 
+185
+g h b f c 
 125
-d e a c 
+d a e c 
 29
 a 
 213
-e h f c g 
+f g e h c 
 191
-d b e c a 
+e a c d b 
 177
-f a e d h 
-187
-f c d b g 
+f h a d e 
+168
+h d i f g 
 74
-b c a 
-111
-d e c a 
+c b a 
+109
+e c b d 
 136
-a c f b e 
-148
-b a d c e 
+a f c b e 
+136
+f d e c b 
 62
 b a 
-173
-d e h b c 
+159
+f c e h d 
 59
 a b 
 40
 a b 
 114
-b e d f 
+e d b f 
 99
-b a c 
-210
-h f g b a 
-144
-f g d e b 
+a c b 
+200
+h g e f b 
+143
+a f g d b 
 90
 a b 
 85
-d c a b 
+c d b a 
 74
 c b 
 100
-d a b c 
+a b c d 
 115
-c a b 
+c b a 
 70
 c b a 
 47
 a b 
 135
-e c g a 
-219
-f e c g b 
+g e c a 
+181
+h e d g f 
 114
-a d c f 
-188
-d e g c a 
+a f d c 
+159
+d f c e a 
 101
-g c e d b 
+g c d e b 
 66
 b a 
+170
+g d f e a 
 196
-f a e d c 
-204
-e a g c h 
+g a e b c 
 119
-c a b 
-151
-c g e b 
+b c a 
+125
+f c b e 
 178
-c d a f 
-143
-b f e a c 
+f c d a 
+140
+e a d b f 
 87
-c b d e a 
+c d b e a 
 167
-b d c a 
+c a b d 
 44
 b 
 91
 c a b 
 149
-d b c a 
-109
 c d b a 
-150
-c b a d 
+109
+b c d a 
+133
+e a c b 
 51
 a b 
 80
-b a 
+a b 
 157
-b c d a 
+d a b c 
 141
-h d i g e 
+h g d i e 

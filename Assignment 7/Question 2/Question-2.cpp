@@ -20,18 +20,13 @@ using namespace std::chrono;
 pair<int, vector<string>> jobScheduling(vector<pair<string, pair<int, int>>> &jobs)
 {
     sort(jobs.begin(), jobs.end(), [](const pair<string, pair<int, int>> &a, const pair<string, pair<int, int>> &b)
-         { return a.second.second > b.second.second ||
-                  (a.second.second == b.second.second && a.second.first < b.second.first); });
-
-    int deadline = 0;
-    for (const auto &job : jobs)
-    {
-        deadline = max(deadline, job.second.first);
-    }
+         { return a.second.first < b.second.first ||
+                  (a.second.first == b.second.first && a.second.second > b.second.second); });
 
     int totalProfit = 0;
+    int size = jobs.size();
     vector<string> sequence;
-    vector<bool> slot(deadline, false);
+    vector<bool> slot(size, false);
 
     for (const auto &job : jobs)
     {
@@ -39,7 +34,7 @@ pair<int, vector<string>> jobScheduling(vector<pair<string, pair<int, int>>> &jo
         int jobDeadline = job.second.first;
         int jobProfit = job.second.second;
 
-        for (int i = jobDeadline - 1; i >= 0; i--)
+        for (int i = min(size, jobDeadline) - 1; i >= 0; i--)
         {
             if (slot[i] == false)
             {
@@ -58,20 +53,6 @@ int main()
 {
     auto start = high_resolution_clock::now();
 
-    // vector<pair<string, pair<int, int>>> jobs = {
-    //     make_pair("a", make_pair(3, 20)),
-    //     make_pair("b", make_pair(1, 45)),
-    //     make_pair("c", make_pair(2, 15)),
-    //     make_pair("d", make_pair(3, 30)),
-    //     make_pair("e", make_pair(2, 35)),
-    //     make_pair("f", make_pair(1, 10))};
-
-    // vector<pair<string, pair<int, int>>> jobs = {
-    //     make_pair("a", make_pair(4, 20)),
-    //     make_pair("b", make_pair(1, 10)),
-    //     make_pair("c", make_pair(1, 40)),
-    //     make_pair("d", make_pair(1, 30))};
-
     vector<pair<string, pair<int, int>>> jobs = {
         make_pair("a", make_pair(2, 10)),
         make_pair("b", make_pair(2, 25)),
@@ -85,8 +66,15 @@ int main()
         make_pair("d", make_pair(3, 30)),
         make_pair("e", make_pair(1, 50))};
 
+    vector<pair<string, pair<int, int>>> jobs2 = {
+        make_pair("a", make_pair(4, 20)),
+        make_pair("b", make_pair(1, 10)),
+        make_pair("c", make_pair(1, 40)),
+        make_pair("d", make_pair(1, 30))};
+
     pair<int, vector<string>> result = jobScheduling(jobs);
     pair<int, vector<string>> result1 = jobScheduling(jobs1);
+    pair<int, vector<string>> result2 = jobScheduling(jobs2);
 
     cout << "Total Profit: " << result.first << endl;
     cout << "Job Sequence: ";
@@ -98,6 +86,13 @@ int main()
     cout << "Total Profit: " << result1.first << endl;
     cout << "Job Sequence: ";
     for (string job : result1.second)
+    {
+        cout << job << " ";
+    }
+    cout << endl;
+    cout << "Total Profit: " << result2.first << endl;
+    cout << "Job Sequence: ";
+    for (string job : result2.second)
     {
         cout << job << " ";
     }
