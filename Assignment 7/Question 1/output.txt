@@ -1,0 +1,20 @@
+1367
+Time taken: 0 microseconds
+2337
+Time taken: 0 microseconds
+902
+Time taken: 0 microseconds
+0
+Time taken: 0 microseconds
+257
+Time taken: 0 microseconds
+451
+Time taken: 0 microseconds
+957
+Time taken: 0 microseconds
+2357
+Time taken: 0 microseconds
+989
+Time taken: 0 microseconds
+0
+Time taken: 0 microseconds
