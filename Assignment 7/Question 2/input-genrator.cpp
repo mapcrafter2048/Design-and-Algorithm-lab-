@@ -52,6 +52,8 @@ int main()
     uniform_int_distribution<> profitDist(10, 50); // Adjust profit range
     uniform_int_distribution<> deadlineDist(1, 5); // Adjust deadline range
 
+    outfile << numTestCases << endl;
+
     for (int i = 0; i < numTestCases; ++i)
     {
         int numJobs = rand() % maxJobsPerCase + 1; // Random number of jobs

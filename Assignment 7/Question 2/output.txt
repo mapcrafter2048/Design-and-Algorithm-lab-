@@ -1,24 +1,100 @@
-0
-
-0
-
-0
-
-0
-
-0
-
-0
-
-0
-
-0
-
-0
-
-0
-
-0
-
-0
-
+57
+a b 
+187
+c b f h e 
+125
+d e a c 
+29
+a 
+213
+e h f c g 
+191
+d b e c a 
+177
+f a e d h 
+187
+f c d b g 
+74
+b c a 
+111
+d e c a 
+136
+a c f b e 
+148
+b a d c e 
+62
+b a 
+173
+d e h b c 
+59
+a b 
+40
+a b 
+114
+b e d f 
+99
+b a c 
+210
+h f g b a 
+144
+f g d e b 
+90
+a b 
+85
+d c a b 
+74
+c b 
+100
+d a b c 
+115
+c a b 
+70
+c b a 
+47
+a b 
+135
+e c g a 
+219
+f e c g b 
+114
+a d c f 
+188
+d e g c a 
+101
+g c e d b 
+66
+b a 
+196
+f a e d c 
+204
+e a g c h 
+119
+c a b 
+151
+c g e b 
+178
+c d a f 
+143
+b f e a c 
+87
+c b d e a 
+167
+b d c a 
+44
+b 
+91
+c a b 
+149
+d b c a 
+109
+c d b a 
+150
+c b a d 
+51
+a b 
+80
+b a 
+157
+b c d a 
+141
+h d i g e 

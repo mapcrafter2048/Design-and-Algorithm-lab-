@@ -20,14 +20,8 @@ using namespace std::chrono;
 pair<int, vector<string>> jobScheduling(vector<pair<string, pair<int, int>>> &jobs)
 {
     sort(jobs.begin(), jobs.end(), [](const pair<string, pair<int, int>> &a, const pair<string, pair<int, int>> &b)
-         {
-    if (a.second.first > b.second.first) {
-        return true;
-    } else if (a.second.first < b.second.first) {
-        return false;
-    } else { 
-        return a.second.second > b.second.second; 
-    } });
+         { return a.second.second > b.second.second ||
+                  (a.second.second == b.second.second && a.second.first < b.second.first); });
 
     int deadline = 0;
     for (const auto &job : jobs)
@@ -72,15 +66,42 @@ int main()
     //     make_pair("e", make_pair(2, 35)),
     //     make_pair("f", make_pair(1, 10))};
 
-    // pair<int, vector<string>> result = jobScheduling(jobs);
+    // vector<pair<string, pair<int, int>>> jobs = {
+    //     make_pair("a", make_pair(4, 20)),
+    //     make_pair("b", make_pair(1, 10)),
+    //     make_pair("c", make_pair(1, 40)),
+    //     make_pair("d", make_pair(1, 30))};
 
-    // cout << "Total Profit: " << result.first << endl;
-    // cout << "Job Sequence: ";
-    // for (string job : result.second)
-    // {
-    //     cout << job << " ";
-    // }
-    // cout << endl;
+    vector<pair<string, pair<int, int>>> jobs = {
+        make_pair("a", make_pair(2, 10)),
+        make_pair("b", make_pair(2, 25)),
+        make_pair("c", make_pair(1, 15)),
+        make_pair("d", make_pair(3, 20))};
+
+    vector<pair<string, pair<int, int>>> jobs1 = {
+        make_pair("a", make_pair(2, 60)),
+        make_pair("b", make_pair(1, 100)),
+        make_pair("c", make_pair(3, 20)),
+        make_pair("d", make_pair(3, 30)),
+        make_pair("e", make_pair(1, 50))};
+
+    pair<int, vector<string>> result = jobScheduling(jobs);
+    pair<int, vector<string>> result1 = jobScheduling(jobs1);
+
+    cout << "Total Profit: " << result.first << endl;
+    cout << "Job Sequence: ";
+    for (string job : result.second)
+    {
+        cout << job << " ";
+    }
+    cout << endl;
+    cout << "Total Profit: " << result1.first << endl;
+    cout << "Job Sequence: ";
+    for (string job : result1.second)
+    {
+        cout << job << " ";
+    }
+    cout << endl;
 
     ifstream inputFile("input.txt");
     ofstream outputFile("output.txt");
