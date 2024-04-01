@@ -17,7 +17,7 @@
 using namespace std;
 using namespace std::chrono;
 
-int knapsackGreedy(vector<long long int> &weights, vector<long long int> &values, long long int weightLimit, int index, vector<vector<long long int>> &dp)
+int knapsackDp(vector<long long int> &weights, vector<long long int> &values, long long int weightLimit, int index, vector<vector<long long int>> &dp)
 {
     if (weightLimit <= 0 || index >= weights.size())
     {
@@ -35,13 +35,41 @@ int knapsackGreedy(vector<long long int> &weights, vector<long long int> &values
     if (weights[index] <= weightLimit)
     {
         // taking the current item to the consideration
-        result = values[index] + knapsackGreedy(weights, values, weightLimit - weights[index], index + 1, dp);
+        result = values[index] + knapsackDp(weights, values, weightLimit - weights[index], index + 1, dp);
     }
     // not taking the current item to the consideration
-    result = max(result, knapsackGreedy(weights, values, weightLimit, index + 1, dp));
+    result = max(result, knapsackDp(weights, values, weightLimit, index + 1, dp));
 
     dp[index][weightLimit] = result;
     return result;
+}
+
+int knapsackGreedy(vector<long long int> &weights, vector<long long int> &values, long long int weightLimit)
+{
+    int n = weights.size();
+    vector<pair<double, int>> valuePerWeight(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        valuePerWeight[i] = make_pair((double)values[i] / weights[i], i);
+    }
+
+    sort(valuePerWeight.rbegin(), valuePerWeight.rend());
+
+    int totalValue = 0;
+    int currentWeight = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        int itemIndex = valuePerWeight[i].second;
+        if (currentWeight + weights[itemIndex] <= weightLimit)
+        {
+            totalValue += values[itemIndex];
+            currentWeight += weights[itemIndex];
+        }
+    }
+
+    return totalValue;
 }
 
 int main()
@@ -76,7 +104,7 @@ int main()
         vector<vector<long long int>> dp(arraySize, vector<long long int>(weightLimit + 1, -1));
 
         auto start = high_resolution_clock::now();
-        int result = knapsackGreedy(weights, values, weightLimit, 0, dp);
+        int result = knapsackDp(weights, values, weightLimit, 0, dp);
         auto stop = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>(stop - start);
 
