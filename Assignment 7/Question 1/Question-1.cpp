@@ -74,6 +74,7 @@ int knapsackGreedy(vector<long long int> &weights, vector<long long int> &values
 
 int main()
 {
+    auto start = high_resolution_clock::now();
     ifstream inputFile("input.txt");
     ofstream outputFile("output.txt");
 
@@ -114,5 +115,9 @@ int main()
 
     inputFile.close();
     outputFile.close();
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start);
+    cout << "Execution time: " << duration.count() << " milliseconds" << endl;
+
     return 0;
 }
