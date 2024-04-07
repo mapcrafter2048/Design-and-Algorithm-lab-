@@ -18,7 +18,7 @@ using namespace std;
 using namespace std::chrono;
 
 /// @brief This function is used to compare the weight of two edges
-/// @param A
+/// @param A The first edge
 /// @param B
 bool compare(vector<int> &A, vector<int> &B)
 {
@@ -81,7 +81,7 @@ void unionFind(int u, int v, vector<int> &parent, vector<int> &rank)
 /// @param edges The edges of the graph
 /// @param n The number of nodes in the graph
 /// @return The minimum spanning tree cost of the graph
-int minimumSpanningTreeCost(vector<vector<int>> &edges, int n)
+pair<int, vector<vector<int>>> solve(vector<vector<int>> &edges, int n)
 {
     sort(edges.begin(), edges.end(), compare);
 
@@ -89,6 +89,7 @@ int minimumSpanningTreeCost(vector<vector<int>> &edges, int n)
     makeSet(parent, rank, n);
 
     int maxWeight = 0;
+    vector<vector<int>> mstEdges;
 
     for (int i = 0; i < edges.size(); i++)
     {
@@ -100,10 +101,11 @@ int minimumSpanningTreeCost(vector<vector<int>> &edges, int n)
         {
             maxWeight += wt;
             unionFind(u, v, parent, rank);
+            mstEdges.push_back(edges[i]);
         }
     }
 
-    return maxWeight;
+    return make_pair(maxWeight, mstEdges);
 }
 
 int main()
