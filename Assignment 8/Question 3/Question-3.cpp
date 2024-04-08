@@ -1,125 +1,106 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <tuple>
+#include <algorithm>
+#include <numeric>
+#include <limits>
+
 using namespace std;
 
-int parent[100005];
+using Edge = tuple<int, int, int>;
 
-vector<int> present;
+vector<int> parent, ranks;
 
-int edg;
-
-struct edge
+int findSet(int u)
 {
-    int src, dest, weight;
-} edges[100005];
-
-bool cmp(edge x, edge y)
-{
-    return x.weight < y.weight;
+    return parent[u] == u ? u : parent[u] = findSet(parent[u]);
 }
 
-void initialise(int n)
+void unionSets(int u, int v)
 {
-    for (int i = 1; i <= n; i++)
-        parent[i] = i;
+    int pu = findSet(u), pv = findSet(v);
+    if (ranks[pu] < ranks[pv])
+        swap(pu, pv);
+    parent[pv] = pu;
+    if (ranks[pu] == ranks[pv])
+        ranks[pu]++;
 }
 
-int find(int x)
+int kruskalMST(vector<Edge> &edges)
 {
-    if (parent[x] == x)
-        return x;
-    return parent[x] = find(parent[x]);
-}
+    sort(edges.begin(), edges.end());
 
-int union1(int i, int sum)
-{
-    int x, y;
-    x = find(edges[i].src);
-    y = find(edges[i].dest);
-    if (x != y)
+    parent.assign(edges.size(), 0);
+    ranks.assign(edges.size(), 0);
+    iota(parent.begin(), parent.end(), 0);
+
+    int mstCost = 0;
+
+    for (auto &[cost, u, v] : edges)
     {
-        parent[x] = y;
-
-        present.push_back(i);
-
-        sum += edges[i].weight;
+        if (findSet(u) != findSet(v))
+        {
+            mstCost += cost;
+            unionSets(u, v);
+        }
     }
-    return sum;
+
+    return mstCost;
 }
 
-int union2(int i, int sum)
+// Finds the second-best MST by excluding one edge at a time
+int findSecondBestMST(vector<Edge> &edges)
 {
-    int x, y;
-    x = find(edges[i].src);
-    y = find(edges[i].dest);
-    if (x != y)
-    {
-        parent[x] = y;
+    int bestMST = kruskalMST(edges);
+    int secondBestMST = std::numeric_limits<int>::max();
 
-        sum += edges[i].weight;
-        edg++;
+    for (auto &[cost, u, v] : edges)
+    {
+        parent.assign(edges.size(), 0);
+        ranks.assign(edges.size(), 0);
+        iota(parent.begin(), parent.end(), 0);
+
+        int currentMST = 0;
+        bool isValidMST = true;
+
+        for (auto &[edgeCost, edgeU, edgeV] : edges)
+        {
+            if (edgeCost != cost || edgeU != u || edgeV != v)
+            {
+                if (findSet(edgeU) != findSet(edgeV))
+                {
+                    currentMST += edgeCost;
+                    unionSets(edgeU, edgeV);
+                }
+                else
+                {
+                    isValidMST = false;
+                    break;
+                }
+            }
+        }
+
+        if (isValidMST && currentMST > bestMST)
+        {
+            secondBestMST = min(secondBestMST, currentMST);
+        }
     }
-    return sum;
+
+    return secondBestMST == std::numeric_limits<int>::max() ? -1 : secondBestMST;
 }
 
 int main()
 {
-    int V, E;
-    V = 5;
-    E = 8;
+    vector<Edge> edges;
 
-    initialise(V);
+    edges.push_back(make_tuple(1, 0, 1));
+    edges.push_back(make_tuple(2, 0, 2));
+    edges.push_back(make_tuple(3, 1, 2));
+    edges.push_back(make_tuple(4, 1, 3));
+    edges.push_back(make_tuple(5, 2, 3));
 
-    vector<int> source = {1, 3, 2, 3,
-                          2, 5, 1, 3};
-    vector<int> destination = {3, 4, 4,
-                               2, 5, 4, 2, 5};
-    vector<int> weights = {75, 51, 19,
-                           95, 42, 31, 9, 66};
-    for (int i = 0; i < E; i++)
-    {
-        edges[i].src = source[i];
-        edges[i].dest = destination[i];
-        edges[i].weight = weights[i];
-    }
+    int secondBestMST = findSecondBestMST(edges);
+    cout << "Second Best MST Cost: " << secondBestMST << endl;
 
-    sort(edges, edges + E, cmp);
-
-    int sum = 0;
-    for (int i = 0; i < E; i++)
-    {
-        sum = union1(i, sum);
-    }
-
-    cout << "MST: " << sum << "\n";
-
-    int sec_best_mst = INT_MAX;
-
-    sum = 0;
-    int j;
-    for (j = 0; j < present.size(); j++)
-    {
-        initialise(V);
-        edg = 0;
-        for (int i = 0; i < E; i++)
-        {
-
-            if (i == present[j])
-                continue;
-            sum = union2(i, sum);
-        }
-
-        if (edg != V - 1)
-        {
-            sum = 0;
-            continue;
-        }
-
-        if (sec_best_mst > sum)
-            sec_best_mst = sum;
-        sum = 0;
-    }
-
-    cout << "Second Best MST: "
-         << sec_best_mst << "\n";
     return 0;
 }
