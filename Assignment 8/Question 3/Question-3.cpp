@@ -7,7 +7,7 @@
 
 using namespace std;
 
-using Edge = tuple<int, int, int>;
+using Edge = tuple<int, int, int>; // weight , start veterx , end vertex
 
 vector<int> parent, ranks;
 
@@ -36,8 +36,10 @@ int kruskalMST(vector<Edge> &edges)
 
     int mstCost = 0;
 
-    for (auto &[cost, u, v] : edges)
+    for (auto &edge : edges)
     {
+        int cost, u, v;
+        tie(cost, u, v) = edge;
         if (findSet(u) != findSet(v))
         {
             mstCost += cost;
@@ -54,17 +56,26 @@ int findSecondBestMST(vector<Edge> &edges)
     int bestMST = kruskalMST(edges);
     int secondBestMST = std::numeric_limits<int>::max();
 
-    for (auto &[cost, u, v] : edges)
+    // iterating over all the edges
+    for (auto &edge : edges)
     {
+        int cost, u, v;
+        tie(cost, u, v) = edge;
+        // Resetting the parent and rank vectors
         parent.assign(edges.size(), 0);
         ranks.assign(edges.size(), 0);
+        // Initializing the parent vector
         iota(parent.begin(), parent.end(), 0);
 
         int currentMST = 0;
         bool isValidMST = true;
 
-        for (auto &[edgeCost, edgeU, edgeV] : edges)
+        // iterating over all the edges again
+        for (auto &Edges : edges)
         {
+            int edgeCost, edgeU, edgeV;
+            tie(edgeCost, edgeU, edgeV) = Edges;
+            // Excluding the edge
             if (edgeCost != cost || edgeU != u || edgeV != v)
             {
                 if (findSet(edgeU) != findSet(edgeV))

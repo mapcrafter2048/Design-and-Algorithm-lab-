@@ -51,8 +51,10 @@ pair<int, vector<pair<int, int>>> findMinAlternatingMST_DP(const vector<vector<t
             if (mask & (1 << j))
             {
                 // iterate through neighbour {to} of node j with their cost and color
-                for (auto &[to, cost, color] : adj[j])
+                for (auto &neighbour : adj[j])
                 {
+                    int to, cost, color;
+                    tie(to, cost, color) = neighbour;
                     // if the neighbour {to} is not visted yet and has different color thant the last visited node
                     if (!(mask & (1 << to)) && color != dp[mask][j][1])
                     {
@@ -105,9 +107,10 @@ int main()
     auto start = high_resolution_clock::now();
 
     vector<vector<tuple<int, int, int>>> adj = {
-        {{1, 1, 0}, {2, 2, 1}},
-        {{0, 1, 1}, {2, 3, 0}},
-        {{0, 2, 1}, {1, 3, 0}}};
+        {{1, 1, 0}, {2, 2, 1}}, // Node 0: neighbor 1 (cost 1, black), neighbor 2 (cost 2, green)
+        {{0, 1, 1}, {2, 3, 0}}, // Node 1: neighbor 0 (cost 1, green), neighbor 2 (cost 3, black)
+        {{0, 2, 1}, {1, 3, 0}}  // Node 2: neighbor 0 (cost 2, green), neighbor 1 (cost 3, black)
+    };
 
     auto result = findMinAlternatingMST_DP(adj);
     int minCost = result.first;

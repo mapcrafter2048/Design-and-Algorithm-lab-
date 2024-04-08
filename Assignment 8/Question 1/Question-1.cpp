@@ -19,10 +19,10 @@ using namespace std::chrono;
 
 /// @brief This function is used to compare the weight of two edges
 /// @param A The first edge
-/// @param B
+/// @param B The second edge
 bool compare(vector<int> &A, vector<int> &B)
 {
-    return A[2] > B[2];
+    return A[2] < B[2];
 }
 
 /// @brief This function is used to create a set of n elements with parent and rank as 0 for each element.
@@ -112,7 +112,17 @@ int main()
 {
     auto start = high_resolution_clock::now();
 
-    // Your code here
+    int n = 6;                                                                                                 // number of nodes
+    vector<vector<int>> edges = {{0, 1, 4}, {0, 2, 3}, {1, 2, 1}, {1, 3, 2}, {2, 3, 4}, {3, 4, 2}, {4, 5, 6}}; // example edges
+
+    pair<int, vector<vector<int>>> result = solve(edges, n);
+
+    cout << "Minimum Spanning Tree Cost: " << result.first << endl;
+    cout << "Minimum Spanning Tree Edges: " << endl;
+    for (auto edge : result.second)
+    {
+        cout << edge[0] << " - " << edge[1] << " : " << edge[2] << endl;
+    }
 
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>(end - start);
